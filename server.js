@@ -5,7 +5,7 @@ const app = express();
 
 const db = require('./app/db.js');
 mongoose.connect(db.db);
-const Todo = require('./app/todoModel.js');
+const Car = require('./app/carModel.js');
 
 app.use(bodyParser.urlencoded({ extend: false }));
 app.use(bodyParser.json());
@@ -14,41 +14,55 @@ app.listen(3000, () => {
     console.log('App Successful listening on port 3000');
 });
 
-app.get('/todos', (req, res) => {
-    Todo.find((err, todos) => {
+app.get('/cars', (req, res) => {
+    Car.find((err, cars) => {
         if (err)
             console.log('Error Error you fukced up!!');
-        res.json(todos);
+        res.json(cars);
     });
 });
 
-
-app.post('/todos', (req, res) => {
-    Todo.create({
-        title: req.query.title,
-        complete: false
-    }, (err, todos) => {
+app.post('/cars', (req, res) => {
+    Car.create({
+        make: req.query.make,
+        model: req.query.model,
+        year: req.query.year
+    }, (err, cars) => {
         if (err)
             console.log('Error');
-        Todo.find((err, todos) => {
+        Car.find((err, cars) => {
             if (err)
                 console.log('Error');
-            res.json(todos);
+            res.json(cars);
         });
     })
 });
 
+app.put('/cars/:id', (req, res) => {
+    Car.update(req.params.id, req.query, (err, cars) => {
+        if (err)
+            console.log(err);
+        Car.find((err, cars) => {
+            if (err)
+                console.log(err);
+            res.json(cars);
+        });
+    });
+})
 
-app.delete('/todos/:id', (req, res) => {
-    Todo.remove({
+
+
+
+app.delete('/cars/:id', (req, res) => {
+    Car.remove({
         _id: req.params.id
-    }, (err, todos) => {
+    }, (err, cars) => {
         if (err)
             console.log('Error');
-        Todo.find((err, todos) => {
+        Car.find((err, cars) => {
             if (err)
                 console.log('Error');
-            res.json(todos);
+            res.json(cars);
         });
     });
 });
