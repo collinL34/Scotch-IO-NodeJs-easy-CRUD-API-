@@ -3,8 +3,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const app = express();
 
-const db = require('./app/db.js');
-mongoose.connect(db.db);
+mongoose.connect(process.env.MLAB);
 const Car = require('./app/carModel.js');
 
 app.use(bodyParser.urlencoded({ extend: false }));
@@ -50,9 +49,6 @@ app.put('/cars/:id', (req, res) => {
     });
 })
 
-
-
-
 app.delete('/cars/:id', (req, res) => {
     Car.remove({
         _id: req.params.id
@@ -66,3 +62,5 @@ app.delete('/cars/:id', (req, res) => {
         });
     });
 });
+
+
